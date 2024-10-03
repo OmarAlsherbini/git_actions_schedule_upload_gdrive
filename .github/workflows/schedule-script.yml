@@ -38,3 +38,13 @@ jobs:
         run: node upload-to-gdrive.js
         env:
           GOOGLE_AUTH_CODE: ${{ secrets.GOOGLE_AUTH_CODE }}
+
+      # Step 7 - Debug: Create example_secret.json from GitHub secret (if necessary)
+      - name: Create example_secret.json
+        run: echo "${{ secrets.EXAMPLE_SECRET }}" > example_secret.json
+
+      # Step 8 - Debug: Debug example_secret.json
+      - name: Debug example_secret.json
+        run: |
+          echo "Contents of example_secret.json:"
+          cat example_secret.json
