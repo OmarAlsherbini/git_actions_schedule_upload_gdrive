@@ -1,0 +1,37 @@
+name: Schedule Script and Upload to GDrive
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Every day at midnight
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Create credentials.json from GitHub secret
+      - name: Create credentials.json
+        run: echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > credentials.json
+
+      # Step 3: Create token.json from GitHub secret
+      - name: Create token.json
+        run: echo "${{ secrets.GOOGLE_TOKEN_JSON }}" > token.json
+
+      # Step 4: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Specify the version of Node.js
+
+      # Step 5: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 6: Run upload-to-gdrive.js which will execute create_file.js and then upload the file
+      - name: Run script to create file and upload to GDrive
+        run: node upload-to-gdrive.js
