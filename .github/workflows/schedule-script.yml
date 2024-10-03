@@ -34,7 +34,7 @@ jobs:
         run: npm install
 
       # Step 6: Run upload-to-gdrive.js and pass the authorization code as an environment variable
-      - name: Run script to create file and upload to GDrive
+      - name: Run script to create file and upload to Google Drive
         run: node upload-to-gdrive.js
         env:
           GOOGLE_AUTH_CODE: ${{ secrets.GOOGLE_AUTH_CODE }}
