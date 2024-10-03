@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { google } = require('googleapis');
 const { exec } = require('child_process');
+const jsonlint = require('jsonlint'); // Import jsonlint for JSON validation
 
 // Constants
 const CREDENTIALS_PATH = './credentials.json'; // Path to credentials file
@@ -26,14 +27,43 @@ function generateFile() {
 
 // Function to authenticate with Google Drive
 async function authenticate() {
-  const credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH, 'utf8'));
+  let credentialsContent, tokenContent;
+
+  // Step 1: Try to read and parse the credentials.json file
+  try {
+    credentialsContent = fs.readFileSync(CREDENTIALS_PATH, 'utf8');
+    console.log("credentials.json content:", credentialsContent); // Debug: print content
+    console.log("Hexadecimal representation of credentials.json content:", Buffer.from(credentialsContent).toString('hex'));
+
+    // Validate JSON syntax using jsonlint
+    jsonlint.parse(credentialsContent);
+    console.log('credentials.json is valid.');
+  } catch (err) {
+    console.error("Error reading or parsing credentials.json:", err);
+    return; // Exit function if error occurs
+  }
+
+  const credentials = JSON.parse(credentialsContent);
   const { client_secret, client_id, redirect_uris } = credentials.installed;
   const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
 
-  // Check if token is already stored
+  // Step 2: Check if token is already stored
   if (fs.existsSync(TOKEN_PATH)) {
-    const token = fs.readFileSync(TOKEN_PATH, 'utf8');
-    oAuth2Client.setCredentials(JSON.parse(token));
+    try {
+      tokenContent = fs.readFileSync(TOKEN_PATH, 'utf8');
+      console.log("token.json content:", tokenContent); // Debug: print content
+      console.log("Hexadecimal representation of token.json content:", Buffer.from(tokenContent).toString('hex'));
+
+      // Validate JSON syntax using jsonlint
+      jsonlint.parse(tokenContent);
+      console.log('token.json is valid.');
+
+      // Set the credentials for OAuth2 client
+      oAuth2Client.setCredentials(JSON.parse(tokenContent));
+    } catch (err) {
+      console.error("Error reading or parsing token.json:", err);
+      return; // Exit function if error occurs
+    }
   } else {
     // Retrieve the authorization code from the environment variable
     const code = process.env.GOOGLE_AUTH_CODE;
