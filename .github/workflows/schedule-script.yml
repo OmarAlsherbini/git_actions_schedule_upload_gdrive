@@ -44,7 +44,10 @@ jobs:
         run: echo "${{ secrets.EXAMPLE_SECRET }}" > example_secret.json
 
       # Step 8 - Debug: Debug example_secret.json
-      - name: Debug example_secret.json
+      - name: Verify contents of example_secret.json
         run: |
-          echo "Contents of example_secret.json:"
-          cat example_secret.json
+          echo "Length of example_secret.json content:"
+          cat example_secret.json | wc -c  # Print the character count
+          echo "SHA256 Hash of example_secret.json content:"
+          sha256sum example_secret.json  # Print the hash
+
