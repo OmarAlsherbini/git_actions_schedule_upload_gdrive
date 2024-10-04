@@ -17,11 +17,11 @@ jobs:
 
       # Step 2: Create credentials.json from GitHub secret
       - name: Create credentials.json
-        run: echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > credentials.json
+        run: echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" | base64 -d > credentials.json
 
       # Step 3: Create token.json from GitHub secret (if necessary)
       - name: Create token.json
-        run: echo "${{ secrets.GOOGLE_TOKEN_JSON }}" > token.json
+        run: echo "${{ secrets.GOOGLE_TOKEN_JSON }}" | base64 -d > token.json
 
       # Step 4: Set up Node.js environment
       - name: Set up Node.js
