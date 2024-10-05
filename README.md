@@ -25,7 +25,7 @@ This repository automates the process of generating a file and uploading it to a
    - Exchange this authorization code for access and refresh tokens, which will be stored in `token.json`.
 
 > [!IMPORTANT]
-> If you do not have a server to handle the OAuth2 redirect URI, configure the **redirect URIs** for your OAuth2 credentials to use `http://localhost`. Alternatively, add `urn:ietf:wg:oauth:2.0:oob` as a redirect URI, which will display the authorization code on the screen for you to manually paste. Refer to [**How To Use**](howtouse) section's important tip.
+> If you do not have a server to handle the OAuth2 redirect URI, configure the **redirect URIs** for your OAuth2 credentials to use `http://localhost`. Alternatively, add `urn:ietf:wg:oauth:2.0:oob` as a redirect URI, which will display the authorization code on the screen for you to manually paste. Refer to [**How To Use**](#how-to-use) section's important tip.
 
 ---
 
